@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import routes from "./routes";
 dotenv.config();
 
 const app = express();
@@ -14,8 +15,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-app.get("/", (req, res) => res.send("started app"));
+app.use("/", routes);
 
 app.use((req, res) => {
 	res.status(404).send({ status: 404, url: `${req.originalUrl} not found` });
