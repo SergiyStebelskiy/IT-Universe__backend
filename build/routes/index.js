@@ -42,9 +42,10 @@ router.post("/login", async (req, res) => {
   } = (0, _validation.authorizationValidate)(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const user = await _User.default.findOne({
-    email: req.body.email
+    email: req.body.email,
+    password: req.body.password
   });
-  if (!user) return res.status(400).send("Wrond email");
+  if (!user) return res.status(400).send("Wrond email or password");
 
   const token = _jsonwebtoken.default.sign({
     _id: user._id
@@ -56,7 +57,7 @@ router.get("/", _verifyToken.verifyToken, async (req, res) => {
   try {
     const user = await _User.default.findOne({
       _id: req.user._id
-    }).select('-password');
+    }).select("-password");
     res.send(user);
   } catch (error) {
     res.status(400).send(error);
