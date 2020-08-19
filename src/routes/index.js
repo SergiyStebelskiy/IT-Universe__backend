@@ -17,8 +17,8 @@ router.post("/registration", async (req, res) => {
 		password: req.body.password
 	});
 	try {
-		const savedUser = await user.save();
-		res.send(savedUser);
+		await user.save();
+		res.send("Success registration");
 	} catch (error) {
 		res.status(400).send(error);
 	}
@@ -27,13 +27,13 @@ router.post("/registration", async (req, res) => {
 router.post("/login", async (req, res) => {
 	const { error } = authorizationValidate(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
-	const user = await User.findOne({ email: req.body.email, password: req.body.password });
+	const user = await User.findOne({ email: req.body.email, password: req.body.password }).select("-password");
 	if (!user) return res.status(400).send("Wrond email or password");
 	const token = jwt.sign({ _id: user._id }, process.env.TOKEN);
-	res.header("Authorization", token).send(token);
+	res.header("Authorization", token).send({ access_token: token, ...user.toObject() });
 });
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/self", verifyToken, async (req, res) => {
 	try {
 		const user = await User.findOne({ _id: req.user._id }).select("-password");
 		res.send(user);

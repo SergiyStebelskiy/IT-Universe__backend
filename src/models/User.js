@@ -16,6 +16,10 @@ const userSchema = {
 		required: true,
 		min: 6,
 		max: 128
+	},
+	avatarIndex: {
+		type: Number,
+		default: () => Math.floor(1 + Math.random() * 20)
 	}
 };
 
