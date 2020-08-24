@@ -19,7 +19,7 @@ const userSchema = {
 	},
 	avatarIndex: {
 		type: Number,
-		default: () => Math.floor(1 + Math.random() * 20)
+		default: () => Math.floor(1 + Math.random() * 100)
 	}
 };
 
