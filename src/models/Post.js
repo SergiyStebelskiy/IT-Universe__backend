@@ -19,8 +19,8 @@ const PostSchema = {
 		min: 1000,
 		max: 10000
 	},
-	author_id: {
-		type: String,
+	author: {
+		type: Object,
 		required: true
 	},
 	links: [
@@ -34,6 +34,10 @@ const PostSchema = {
 				required: true
 			}
 		}
-	]
+	],
+	created_at: {
+		type: Date,
+		default: Date.now
+	}
 };
 module.exports = mongoose.model("Post", PostSchema);
