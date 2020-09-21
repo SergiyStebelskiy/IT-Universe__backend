@@ -4,14 +4,14 @@ import { postValidate } from "../validation";
 
 const posts = async (req, res) => {
 	Post.find({}, (err, post) => {
-		if (err) res.status(400).res.send(err);
+		if (err) res.status(404).res.send(err);
 		res.json(post);
 	});
 };
 
 const post = async (req, res) => {
 	Post.findById(req.params.postId, (err, post) => {
-		if (err) res.status(400).send(err);
+		if (err) res.status(404).send(err);
 		res.json(post);
 	});
 };
@@ -19,7 +19,7 @@ const post = async (req, res) => {
 const addPost = async (req, res) => {
 	const { error } = postValidate(req.body);
 	const { author_email, ...rest } = req.body;
-	if (error) return res.status(400).send(error.details[0].message);
+	if (error) return res.status(402).send(error.details[0].message);
 	const author = await User.findOne({ email: req.body.author_email }).select("-password");
 	const newPost = new Post({
 		...rest,
@@ -29,7 +29,7 @@ const addPost = async (req, res) => {
 		newPost.save();
 		res.json(newPost);
 	} catch (error) {
-		res.status(400).send(error);
+		res.status(402).send(error);
 	}
 };
 
