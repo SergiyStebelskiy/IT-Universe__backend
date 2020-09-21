@@ -4,14 +4,14 @@ import { postValidate } from "../validation";
 
 const posts = async (req, res) => {
 	Post.find({}, (err, post) => {
-		if (err) res.send(err);
+		if (err) res.status(400).res.send(err);
 		res.json(post);
 	});
 };
 
 const post = async (req, res) => {
 	Post.findById(req.params.postId, (err, post) => {
-		if (err) res.send(err);
+		if (err) res.status(400).send(err);
 		res.json(post);
 	});
 };
