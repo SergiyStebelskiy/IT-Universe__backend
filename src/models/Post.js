@@ -11,7 +11,7 @@ const PostSchema = {
 		type: String,
 		required: true,
 		min: 6,
-		max: 300
+		max: 500
 	},
 	content: {
 		type: String,
