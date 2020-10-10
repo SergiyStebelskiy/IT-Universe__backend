@@ -14,11 +14,11 @@ router.post("/login", authorization);
 router.get("/self", verifyToken, profile);
 
 router.get("/posts", posts);
-router.get("/requests-posts", requestsPosts);
+router.get("/requests-posts", verifyToken, requestsPosts);
 router.get(`/posts/:postId`, post);
-router.post("/posts", addPost);
-router.post(`/posts/:postId/approve`, approvePost);
-router.delete(`/posts/:postId/reject`, rejectPost);
+router.post("/posts", verifyToken, addPost);
+router.post(`/posts/:postId/approve`, verifyToken, approvePost);
+router.delete(`/posts/:postId/reject`, verifyToken, rejectPost);
 
 // router.put("/update/posts", async ({ req, res }) => {
 // 	await Admin.updateOne(
