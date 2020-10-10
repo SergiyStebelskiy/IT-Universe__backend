@@ -1,4 +1,4 @@
-import User from "../models/User";
+import { User } from "../models/User";
 import { authorizationValidate } from "../validation";
 import jwt from "jsonwebtoken";
 

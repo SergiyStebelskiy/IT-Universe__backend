@@ -3,7 +3,7 @@ import { verifyToken } from "./verifyToken";
 import { registration } from "../controllers/registration";
 import { authorization } from "../controllers/authorization";
 import { profile } from "../controllers/profile";
-import { posts, post, addPost } from "../controllers/posts";
+import { posts, requestsPosts, post, addPost, approvePost, rejectPost } from "../controllers/posts";
 
 const router = express.Router();
 
@@ -14,7 +14,24 @@ router.post("/login", authorization);
 router.get("/self", verifyToken, profile);
 
 router.get("/posts", posts);
+router.get("/requests-posts", requestsPosts);
 router.get(`/posts/:postId`, post);
 router.post("/posts", addPost);
+router.post(`/posts/:postId/approve`, approvePost);
+router.delete(`/posts/:postId/reject`, rejectPost);
+
+// router.put("/update/posts", async ({ req, res }) => {
+// 	await Admin.updateOne(
+// 		{ email: "admin@mail.com" },
+// 		{ $set: { requests_posts: [], type: "ADMIN" } },
+// 		(err, writeResult) => {
+// 			if (err) {
+// 				console.log("err", err);
+// 			} else {
+// 				res.send(writeResult);
+// 			}
+// 		}
+// 	);
+// });
 
 module.exports = router;

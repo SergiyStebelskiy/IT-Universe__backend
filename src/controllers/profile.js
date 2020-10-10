@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "../models/User";
+import { User } from "../models/User";
 import Post from "../models/Post";
 
 const profile = async (req, res) => {

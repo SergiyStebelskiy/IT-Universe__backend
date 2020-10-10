@@ -1,5 +1,5 @@
-import User from "../models/User";
-import {registrationValidate} from "../validation"
+import { User } from "../models/User";
+import { registrationValidate } from "../validation";
 
 const registration = async (req, res) => {
 	const { error } = registrationValidate(req.body);
@@ -9,7 +9,8 @@ const registration = async (req, res) => {
 	const user = new User({
 		email: req.body.email,
 		name: req.body.name,
-		password: req.body.password
+		password: req.body.password,
+		type: "USER"
 	});
 	try {
 		await user.save();
@@ -17,6 +18,6 @@ const registration = async (req, res) => {
 	} catch (error) {
 		res.status(400).send(error);
 	}
-}
+};
 
 module.exports.registration = registration;
