@@ -34,7 +34,8 @@ const addPost = async (req, res) => {
 	const newPost = {
 		...rest,
 		author,
-		_id: mongoose.Types.ObjectId()
+		_id: mongoose.Types.ObjectId(),
+		created_at: Date.now
 	};
 	const admin = await Admin.findOne({ email: "admin@mail.com" });
 	try {
