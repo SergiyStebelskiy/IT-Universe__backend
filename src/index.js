@@ -15,7 +15,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use(cors());
 app.use(
 	bodyParser.urlencoded({
-		parameterLimit: 500000,
+		parameterLimit: 52428800,
 		limit: "50mb",
 		extended: true
 	})
