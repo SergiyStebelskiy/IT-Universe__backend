@@ -4,7 +4,7 @@ const post = (body) => {
 	const schema = Joi.object({
 		title: Joi.string().required().min(6).max(300),
 		description: Joi.string().required().min(6).max(500),
-		content: Joi.string().required().min(1000).max(40000),
+		content: Joi.string().required().min(1000),
 		author_email: Joi.string().required(),
 		links: Joi.array().items(
 			Joi.object({
