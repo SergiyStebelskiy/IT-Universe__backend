@@ -20,7 +20,7 @@ app.use(
 		extended: true
 	})
 );
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 app.use("/", routes);
 
 app.use((req, res) => {
