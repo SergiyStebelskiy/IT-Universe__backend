@@ -13,7 +13,13 @@ mongoose.connect(process.env.DATABASE_URL, {
 	useUnifiedTopology: true
 });
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	bodyParser.urlencoded({
+		parameterLimit: 100000,
+		limit: "50mb",
+		extended: true
+	})
+);
 app.use(bodyParser.json());
 app.use("/", routes);
 
