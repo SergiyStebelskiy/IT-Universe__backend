@@ -17,7 +17,7 @@ const PostSchema = {
 		type: String,
 		required: true,
 		min: 1000,
-		max: 10000
+		max: 20000
 	},
 	author: {
 		type: Object,
