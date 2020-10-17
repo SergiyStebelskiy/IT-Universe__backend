@@ -2,8 +2,15 @@ import express from "express";
 import { verifyToken } from "./verifyToken";
 import { registration } from "../controllers/registration";
 import { authorization } from "../controllers/authorization";
-import { profile } from "../controllers/profile";
-import { posts, requestsPosts, post, addPost, approvePost, rejectPost } from "../controllers/posts";
+import { profile, searchUsers } from "../controllers/profile";
+import {
+  posts,
+  requestsPosts,
+  post,
+  addPost,
+  approvePost,
+  rejectPost,
+} from "../controllers/posts";
 
 const router = express.Router();
 
@@ -12,6 +19,8 @@ router.post("/registration", registration);
 router.post("/login", authorization);
 
 router.get("/self", verifyToken, profile);
+router.get("/users/:userId", profile);
+router.get("/users", searchUsers);
 
 router.get("/posts", posts);
 router.get("/requests-posts", verifyToken, requestsPosts);
