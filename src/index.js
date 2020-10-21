@@ -12,7 +12,6 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useFindAndModify: false,
@@ -27,10 +26,17 @@ app.use(
   })
 );
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
-io.on("connection", function (socket) {
-  console.log("new client connected");
-});
+
 app.use("/", routes);
+
+io.on("connection", (socket) => {
+  socket.on("CONNECT", (data) => {
+    socket.join(data);
+  });
+  socket.on("ADD_MESSAGE", (data) => {
+    socket.to(data.chat._id).broadcast.emit("ADD_MESSAGE", data);
+  });
+});
 
 app.use((req, res) => {
   res.status(404).send({ status: 404, url: `${req.originalUrl} not found` });
