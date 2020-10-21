@@ -48,7 +48,7 @@ const addMessage = async (req, res) => {
       if (err) {
         res.status(400).send(err);
       }
-      res.send(chat);
+      res.send(message);
     }
   );
 };

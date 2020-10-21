@@ -35,10 +35,10 @@ router.post("/posts", verifyToken, addPost);
 router.post(`/posts/:postId/approve`, verifyToken, approvePost);
 router.delete(`/posts/:postId/reject`, verifyToken, rejectPost);
 
-router.post("/chats", createChat);
-router.get("/chats/:chatId", getChat);
-router.get("/users/:userId/chats", getUserChats);
-router.post("/chats/:chatId", addMessage);
+router.post("/chats", verifyToken, createChat);
+router.get("/chats/:chatId", verifyToken, getChat);
+router.get("/users/:userId/chats", verifyToken, getUserChats);
+router.post("/chats/:chatId", verifyToken, addMessage);
 
 // router.put("/update/posts", async ({ req, res }) => {
 // 	await Admin.updateOne(
