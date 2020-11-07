@@ -29,12 +29,40 @@ app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
 app.use("/", routes);
 
+let users = [];
+
 io.on("connection", (socket) => {
-  socket.on("CONNECT", (data) => {
-    socket.join(data);
+  socket.on("CONNECT", (email) => {
+    const newUsers = [
+      ...users.filter((e) => e.email !== email),
+      {
+        email,
+        socket_id: socket.id,
+      },
+    ];
+    users = newUsers;
+    newUsers.map((user) => {
+      socket.to(user.socket_id).emit(
+        "ONLINE_USERS",
+        newUsers.map((e) => e.email)
+      );
+    });
+    console.log("users", users);
   });
   socket.on("ADD_MESSAGE", (data) => {
-    socket.to(data.chat._id).broadcast.emit("ADD_MESSAGE", data);
+    const recipient = users.filter((e) => e.email === data.recipient)[0];
+    socket.to(recipient.socket_id).emit("ADD_MESSAGE", data.message);
+  });
+  socket.on("disconnect", () => {
+    const newUsers = users.filter((e) => e.socket_id !== socket.id);
+    users = newUsers;
+    newUsers.map((user) => {
+      socket.to(user.socket_id).emit(
+        "ONLINE_USERS",
+        newUsers.map((e) => e.email)
+      );
+    });
+    console.log("disconnect", newUsers);
   });
 });
 
