@@ -2,7 +2,8 @@ import express from "express";
 import { verifyToken } from "./verifyToken";
 import { registration } from "../controllers/registration";
 import { authorization } from "../controllers/authorization";
-import { profile, searchUsers } from "../controllers/profile";
+import { profile, searchUsers, onlineUsers } from "../controllers/profile";
+import { User } from "../models/User";
 import {
   posts,
   requestsPosts,
@@ -27,6 +28,7 @@ router.post("/login", authorization);
 router.get("/self", verifyToken, profile);
 router.get("/users/:userId", profile);
 router.get("/users", searchUsers);
+router.get("/online-users", onlineUsers);
 
 router.get("/posts", posts);
 router.get("/requests-posts", verifyToken, requestsPosts);
@@ -40,18 +42,14 @@ router.get("/chats/:chatId", verifyToken, getChat);
 router.get("/users/:userId/chats", verifyToken, getUserChats);
 router.post("/chats/:chatId", verifyToken, addMessage);
 
-// router.put("/update/posts", async ({ req, res }) => {
-// 	await Admin.updateOne(
-// 		{ email: "admin@mail.com" },
-// 		{ $set: { requests_posts: [], type: "ADMIN" } },
-// 		(err, writeResult) => {
-// 			if (err) {
-// 				console.log("err", err);
-// 			} else {
-// 				res.send(writeResult);
-// 			}
-// 		}
-// 	);
-// });
+router.put("/update/users", async ({ req, res }) => {
+  await User.updateMany({}, { $set: { online: false } }, (err, writeResult) => {
+    if (err) {
+      console.log("err", err);
+    } else {
+      res.send(writeResult);
+    }
+  });
+});
 
 module.exports = router;

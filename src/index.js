@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import routes from "./routes";
 import http from "http";
 import socketIO from "socket.io";
+import { User } from "./models/User";
 
 dotenv.config();
 
@@ -32,37 +33,38 @@ app.use("/", routes);
 let users = [];
 
 io.on("connection", (socket) => {
-  socket.on("CONNECT", (email) => {
-    const newUsers = [
-      ...users.filter((e) => e.email !== email),
-      {
-        email,
-        socket_id: socket.id,
-      },
-    ];
-    users = newUsers;
-    newUsers.map((user) => {
-      socket.to(user.socket_id).emit(
-        "ONLINE_USERS",
-        newUsers.map((e) => e.email)
-      );
-    });
-    console.log("users", users);
+  socket.on("CONNECT", async (email) => {
+    const alreadyConnected = users.filter(
+      (e) => e.email === email && e.socket_id === socket.id
+    ).length;
+    const user = await User.find({ email }).select("-password");
+    if (!alreadyConnected) {
+      const newUsers = [
+        ...users.filter((e) => e.email !== email),
+        {
+          ...user[0].toObject(),
+          socket_id: socket.id,
+        },
+      ];
+      users = newUsers;
+      newUsers.map((user) => {
+        socket.to(user.socket_id).emit("ONLINE_USERS", newUsers);
+      });
+      await User.updateOne({ email }, { $set: { online: true } });
+    }
   });
   socket.on("ADD_MESSAGE", (data) => {
     const recipient = users.filter((e) => e.email === data.recipient)[0];
     socket.to(recipient.socket_id).emit("ADD_MESSAGE", data.message);
   });
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
+    const user = users.filter((e) => e.socket_id === socket.id)[0];
     const newUsers = users.filter((e) => e.socket_id !== socket.id);
     users = newUsers;
-    newUsers.map((user) => {
-      socket.to(user.socket_id).emit(
-        "ONLINE_USERS",
-        newUsers.map((e) => e.email)
-      );
+    newUsers.map(async (user) => {
+      socket.to(user.socket_id).emit("ONLINE_USERS", newUsers);
     });
-    console.log("disconnect", newUsers);
+    await User.updateOne({ email: user?.email }, { $set: { online: false } });
   });
 });
 

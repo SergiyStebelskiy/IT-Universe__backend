@@ -29,5 +29,16 @@ const searchUsers = async (req, res) => {
   }).select("-password");
 };
 
+const onlineUsers = async (req, res) => {
+  await User.find({ online: true }, (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+
 module.exports.profile = profile;
 module.exports.searchUsers = searchUsers;
+module.exports.onlineUsers = onlineUsers;
