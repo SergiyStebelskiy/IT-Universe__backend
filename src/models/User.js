@@ -30,6 +30,10 @@ const userSchema = {
     type: Boolean,
     default: false,
   },
+  last_activity_date: {
+    type: Date,
+    default: Date.now,
+  },
 };
 
 const adminSchema = {
@@ -65,6 +69,10 @@ const adminSchema = {
   online: {
     type: Boolean,
     default: false,
+  },
+  last_activity_date: {
+    type: Date,
+    default: Date.now,
   },
 };
 

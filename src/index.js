@@ -64,7 +64,10 @@ io.on("connection", (socket) => {
     newUsers.map(async (user) => {
       socket.to(user.socket_id).emit("ONLINE_USERS", newUsers);
     });
-    await User.updateOne({ email: user?.email }, { $set: { online: false } });
+    await User.updateOne(
+      { email: user?.email },
+      { $set: { online: false, last_activity_date: new Date() } }
+    );
   });
 });
 

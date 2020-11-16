@@ -42,14 +42,18 @@ router.get("/chats/:chatId", verifyToken, getChat);
 router.get("/users/:userId/chats", verifyToken, getUserChats);
 router.post("/chats/:chatId", verifyToken, addMessage);
 
-router.put("/update/users", async ({ req, res }) => {
-  await User.updateMany({}, { $set: { online: false } }, (err, writeResult) => {
-    if (err) {
-      console.log("err", err);
-    } else {
-      res.send(writeResult);
-    }
-  });
-});
+// router.put("/update/users", async ({ req, res }) => {
+//   await User.updateMany(
+//     {},
+//     { $set: { last_activity_date: new Date() } },
+//     (err, writeResult) => {
+//       if (err) {
+//         console.log("err", err);
+//       } else {
+//         res.send(writeResult);
+//       }
+//     }
+//   );
+// });
 
 module.exports = router;
