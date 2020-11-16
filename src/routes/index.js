@@ -3,7 +3,7 @@ import { verifyToken } from "./verifyToken";
 import { registration } from "../controllers/registration";
 import { authorization } from "../controllers/authorization";
 import { profile, searchUsers, onlineUsers } from "../controllers/profile";
-import { User } from "../models/User";
+import Chat from "../models/Chat";
 import {
   posts,
   requestsPosts,
@@ -18,6 +18,7 @@ import {
   getUserChats,
   addMessage,
 } from "../controllers/chat";
+import e from "express";
 
 const router = express.Router();
 
@@ -42,18 +43,35 @@ router.get("/chats/:chatId", verifyToken, getChat);
 router.get("/users/:userId/chats", verifyToken, getUserChats);
 router.post("/chats/:chatId", verifyToken, addMessage);
 
-// router.put("/update/users", async ({ req, res }) => {
-//   await User.updateMany(
-//     {},
-//     { $set: { last_activity_date: new Date() } },
-//     (err, writeResult) => {
-//       if (err) {
-//         console.log("err", err);
-//       } else {
-//         res.send(writeResult);
+// router.put("/update/chats", async ({ req, res }) => {
+//   // await Chat.updateMany(
+//   //   {},
+//   //   { $set: { last_activity_date: new Date() } },
+//   //   (err, writeResult) => {
+//   //     if (err) {
+//   //       console.log("err", err);
+//   //     } else {
+//   //       res.send(writeResult);
+//   //     }
+//   //   }
+//   // );
+//   const chats = await Chat.find({});
+//   const formatUsers = (users) => {
+//     return users.map((e) => ({ ...e, last_activity_date: new Date() }));
+//   };
+//   chats.map(async (chat) => {
+//     await Chat.updateOne(
+//       { _id: chat._id },
+//       { $set: { users: formatUsers(chat.users) } },
+//       (err, result) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           console.log(result);
+//         }
 //       }
-//     }
-//   );
+//     );
+//   });
 // });
 
 module.exports = router;

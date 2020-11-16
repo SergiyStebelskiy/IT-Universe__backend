@@ -40,7 +40,6 @@ const getUserChats = async (req, res) => {
 const addMessage = async (req, res) => {
   const author = await User.findById(req.body.author);
   const message = { author, text: req.body.text };
-  //   const chat = await Chat.findById(req.params.chatId);
   Chat.updateOne(
     { _id: mongoose.Types.ObjectId(req.params.chatId) },
     { $push: { messages: message } },
